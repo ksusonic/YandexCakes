@@ -1,5 +1,7 @@
-## Delivery Cakes service
+# Yandex Cakes
 
-Backend server on _python 3.9_
+##### Backend server on Python3.9, DRF
 
-in development...
+dependencies:
+
+`pip install requirements.txt`
