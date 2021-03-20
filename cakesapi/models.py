@@ -14,17 +14,11 @@ class WorkingHours(models.Model):
 class Courier(models.Model):
     courier_id = models.AutoField(primary_key=True)
 
-    FOOT = 10
-    BIKE = 15
-    CAR = 50
-    COURIER_TYPES = [  # Тип <-> грузоподъемность
-        (FOOT, 'foot'),
-        (BIKE, 'bike'),
-        (CAR, 'car')
-    ]
-    courier_type = models.IntegerField(
-        choices=COURIER_TYPES,
-    )
+    class CourierTypes(models.IntegerChoices):
+        FOOT = 10
+        BIKE = 15
+        CAR = 50
 
-    regions = models.ManyToManyField(Region)
+    courier_type = models.IntegerField(choices=CourierTypes.choices)
+    regions = models.ManyToManyField(Region, )
     working_hours = models.ManyToManyField(WorkingHours)
