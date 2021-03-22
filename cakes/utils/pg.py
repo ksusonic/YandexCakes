@@ -7,7 +7,7 @@ from alembic.config import Config
 from configargparse import Namespace
 
 PROJECT_PATH = Path(__file__).parent.parent.resolve()
-DEFAULT_PG_URL = 'postgresql://user:hackme@localhost/yandexcakes'
+DEFAULT_PG_URL = 'postgresql://localhost:5432/yandexcakes'
 
 
 def make_alembic_config(cmd_opts: Union[Namespace, SimpleNamespace],
