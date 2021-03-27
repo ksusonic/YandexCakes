@@ -5,22 +5,12 @@ from aiohttp.web_response import Response
 from aiohttp_apispec import docs, request_schema, response_schema
 from aiomisc import chunk_list
 
-from cakes.api.schema import CourierResponseSchema, CourierSchema, PatchCourierSchema, PatchCourierResponseSchema
+from cakes.api.schema import CourierResponseSchema, CourierSchema
 from cakes.db.schema import couriers_table as couriers_t
 from cakes.utils.pg import SelectQuery, MAX_QUERY_ARGS
 
-from .query import COURIERS_QUERY
 from .base import BaseView
-
-
-class CourierView(BaseView):
-    URL_PATH = r'/couriers/{courier_id:\d+}'
-
-    @docs(summary="Возвращает информацию о курьере и дополнительную статистику: рейтинг и заработок.")
-    @response_schema(CourierResponseSchema())
-    async def get(self):
-        body = SelectQuery(COURIERS_QUERY, self.pg.transaction())
-        return Response(body=body)
+from .query import COURIERS_QUERY
 
 
 class CouriersView(BaseView):
