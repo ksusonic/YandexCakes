@@ -7,11 +7,3 @@ Session = sessionmaker(autocommit=False,
                        autoflush=False,
                        bind=Engine)
 
-
-def get_db():
-    db = Session()
-    try:
-        yield db
-    finally:
-        db.close()
-

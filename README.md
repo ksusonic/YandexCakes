@@ -1,6 +1,6 @@
 # Yandex Cakes
 
-##### REST API for online shop on Python3.9
+##### REST API for online cakes shop on Python 3.9
 
-Версия на фреймворке Flask.
+Версия на фреймворке FastAPI.
 В планах переход на Aiohttp.
