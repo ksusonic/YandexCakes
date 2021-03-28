@@ -38,6 +38,14 @@ class Courier(Base):
     regions = Column(ARRAY(Integer), nullable=False)
     working_hours = Column(ARRAY(String), nullable=False)
 
+    def to_dict(self) -> dict:
+        return {
+            'courier_id': self.courier_id,
+            'courier_type': self.courier_type.name,
+            'regions': self.regions,
+            'working_hours': self.working_hours
+        }
+
     @classmethod
     def weight(cls):
         weight_values = {
@@ -53,5 +61,3 @@ class Courier(Base):
             return weight_values['car']
         else:
             raise ValueError("No such courier type")
-
-

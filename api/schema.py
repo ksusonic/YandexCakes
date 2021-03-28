@@ -1,7 +1,11 @@
-from pydantic.class_validators import Optional, List
+from typing import List, Optional
 from pydantic.main import BaseModel
-from sqlalchemy import Column, Integer, String, ARRAY, Float
-from sqlalchemy.orm import relationship
+
+
+class PatchCourier(BaseModel):
+    courier_type: Optional[str]
+    regions: Optional[List[Optional[int]]]
+    working_hours: Optional[List[Optional[str]]]
 
 
 class Courier(BaseModel):
@@ -11,3 +15,5 @@ class Courier(BaseModel):
     working_hours: List[Optional[str]]
 
 
+class Couriers(BaseModel):
+    data: List[Courier]
