@@ -1,5 +1,4 @@
 from flask import Flask
-from api.blueprints.couriers import couriers_bp
 
 # TODO: https://flask.palletsprojects.com/en/1.1.x/config/
 
@@ -18,7 +17,4 @@ def configure_app(app: Flask) -> Flask:
         SQLAlCHEMY_ECHO=SQLAlCHEMY_ECHO,
         DEBUG=DEBUG,
     )
-
-    app.register_blueprint(couriers_bp)
-
     return app
