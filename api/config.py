@@ -1,4 +1,4 @@
-SQLALCHEMY_DATABASE_URI = 'sqlite:db/db.sqlite'  # TODO: Replace on PostgreSQL and get from environment
+SQLALCHEMY_DATABASE_URI = 'postgresql://localhost:5432/cakes'  # TODO: get from environment
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLAlCHEMY_ECHO = False
 
