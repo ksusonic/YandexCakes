@@ -5,8 +5,8 @@ from aiohttp.web_response import Response
 from aiohttp_apispec import docs, request_schema, response_schema
 from aiomisc import chunk_list
 
-from cakes.api.schema import CourierResponseSchema, CourierSchema
-from cakes.db.schema import couriers_table as couriers_t
+from cakes.api.schema import CourierSchema
+from cakes.db.schema import Courier, Region, WorkingHours
 from cakes.utils.pg import SelectQuery, MAX_QUERY_ARGS
 
 from .base import BaseView
@@ -21,7 +21,7 @@ class CouriersView(BaseView):
     # частями.
     # Максимальное кол-во строк для вставки можно рассчитать как отношение
     # MAX_QUERY_ARGS к кол-ву вставляемых в таблицу столбцов.
-    MAX_COURIERS_PER_INSERT = MAX_QUERY_ARGS // len(couriers_t.columns)
+    MAX_COURIERS_PER_INSERT = MAX_QUERY_ARGS // len(Courier.columns)
 
     @classmethod
     def make_couriers_table_rows(cls, couriers) -> Generator:
