@@ -1,10 +1,10 @@
-from sqlalchemy import and_, func, select
+from sqlalchemy import select
 
-from cakes.db.schema import couriers_table
+from cakes.db.schema import Courier
 
 COURIERS_QUERY = select([
-    couriers_table.c.courier_id,
-    couriers_table.c.courier_type,
-    couriers_table.c.regions,
-    couriers_table.c.working_hours
+    Courier.courier_id,
+    Courier.courier_type,
+    Courier.regions,
+    Courier.working_hours
 ])

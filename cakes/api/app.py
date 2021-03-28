@@ -32,7 +32,7 @@ def create_app() -> Application:
         app.router.add_route('*', handler.URL_PATH, handler)
 
     # Swagger документация
-    setup_aiohttp_apispec(app=app, title='Citizens API', swagger_path='/',
+    setup_aiohttp_apispec(app=app, title='Cakes API', swagger_path='/',
                           error_callback=handle_validation_error)
 
     # Автоматическая сериализация в json данных в HTTP ответах

@@ -21,7 +21,6 @@ class CouriersView(BaseView):
     # частями.
     # Максимальное кол-во строк для вставки можно рассчитать как отношение
     # MAX_QUERY_ARGS к кол-ву вставляемых в таблицу столбцов.
-    MAX_COURIERS_PER_INSERT = MAX_QUERY_ARGS // len(Courier.columns)
 
     @classmethod
     def make_couriers_table_rows(cls, couriers) -> Generator:
@@ -38,12 +37,12 @@ class CouriersView(BaseView):
 
     @docs(summary='Добавить информацию о курьерах')
     @request_schema(CourierSchema())
-    @response_schema(CourierResponseSchema(), code=HTTPStatus.CREATED.value)
+    @response_schema(CourierSchema(), code=HTTPStatus.CREATED.value)
     async def post(self):
         # Транзакция требуется чтобы в случае ошибки (или отключения клиента,
         # не дождавшегося ответа) откатить частично добавленные изменения.
         async with self.pg.transaction() as conn:
-            query = couriers_t.insert().returning(couriers_t.c.courier_id)
+            query = CourierSchema.insert().returning(couriers_t.c.courier_id)
             courier_id = await conn.fetchval(query)
 
             couriers = self.request['data']['couriers']
