@@ -3,6 +3,10 @@ from typing import List, Optional
 from pydantic.main import BaseModel
 
 
+def check_courier_type(courier_type: str) -> bool:
+    return courier_type == 'foot' or courier_type == 'bike' or courier_type == 'car'
+
+
 def check_work_time(list_times: list) -> bool:
     for t in list_times:
         if not time.strptime(t.split('-')[0], '%H:%M').tm_hour < time.strptime(t.split('-')[1], '%H:%M').tm_hour:

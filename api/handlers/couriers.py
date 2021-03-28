@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 
 from db.base import Session
 
-from api.schema import Couriers, check_work_time
+from api.schema import Couriers, check_work_time, check_courier_type
 from db.schema import Courier as CourierSchema
 
 router = APIRouter(prefix="/couriers")
@@ -22,7 +22,7 @@ async def post_couriers(courier_list: Couriers):
             regions=courier.regions,
             working_hours=courier.working_hours
         )
-        if not check_work_time(courier.working_hours):
+        if not check_work_time(courier.working_hours) or not check_courier_type(courier.courier_type):
             courier_fail_ids.append(courier.courier_id)
             continue
 
