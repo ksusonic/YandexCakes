@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_restful import Api
+from api.config import configure_app
 
-app = Flask(__name__)
+app = configure_app(Flask(__name__))
 api = Api(app)
 
 if __name__ == '__main__':
