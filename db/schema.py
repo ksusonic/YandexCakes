@@ -30,6 +30,20 @@ class CourierType(PyEnum):
     bike = 'bike'
     car = 'car'
 
+    def weight(self):
+        weight_values = {
+            'foot': 10,
+            'bike': 15,
+            'car': 50
+        }
+
+        if self.foot:
+            return weight_values['foot']
+        elif self.bike:
+            return weight_values['bike']
+        else:
+            return weight_values['car']
+
 
 class Courier(Base):
     __tablename__ = 'courier'
@@ -45,22 +59,6 @@ class Courier(Base):
             'regions': self.regions,
             'working_hours': self.working_hours
         }
-
-    @classmethod
-    def weight(cls):
-        weight_values = {
-            'foot': 10,
-            'bike': 15,
-            'car': 50
-        }
-        if cls.courier_type == CourierType.foot:
-            return weight_values['foot']
-        elif cls.courier_type == CourierType.bike:
-            return weight_values['bike']
-        elif cls.courier_type == CourierType.car:
-            return weight_values['car']
-        else:
-            raise ValueError("No such courier type")
 
 
 class Order(Base):
