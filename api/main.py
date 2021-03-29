@@ -8,7 +8,7 @@ from api.config import desc
 from api.handlers import ROUTERS
 from db.base import init_db
 
-app = FastAPI(title="YandexCakes", description=desc)
+app = FastAPI(title="YandexCakes", description=desc, docs_url="/")
 init_db()
 
 for router in ROUTERS:
