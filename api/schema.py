@@ -68,6 +68,12 @@ class CourierID(BaseModel):
     courier_id: int
 
 
+class OrderDone(BaseModel):
+    courier_id: int
+    order_id: int
+    complete_time: datetime
+
+
 def check_courier_time_for_order(courier: list, order: list) -> bool:
     for order_time in order:
         o_start, o_end = order_time.split('-')

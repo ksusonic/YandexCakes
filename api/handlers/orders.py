@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 from db.base import Session
 
-from api.schema import Order, Orders, Courier, CourierID, CourierType, check_courier_time_for_order
+from api.schema import Order, Orders, Courier, CourierID, check_courier_time_for_order, OrderDone
 from db.schema import Order as OrderSchema, Courier as CourierSchema
 
 router = APIRouter(prefix="/orders")
@@ -72,3 +72,21 @@ async def assign_post(courier_id: CourierID):
         })
     else:
         return default_response
+
+
+@router.post('/complete')
+async def complete_post(order: OrderDone):
+    db = Session()
+    courier_from_db = db.query(CourierSchema).get(order.courier_id)
+    order_from_db = db.query(OrderSchema).get(order.order_id)
+
+    if not courier_from_db or not order_from_db or courier_from_db.courier_id != order.courier_id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Wrong courier or order id")
+
+    # TODO count rating
+
+    db.delete(order_from_db)
+    db.commit()
+    return JSONResponse(status_code=status.HTTP_200_OK, content={
+        'order_id': order.order_id
+    })
