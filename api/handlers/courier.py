@@ -2,7 +2,7 @@ from fastapi import APIRouter, status
 from starlette.exceptions import HTTPException
 from starlette.responses import JSONResponse
 
-from api.schema import PatchCourier, check_work_time, check_courier_type
+from api.schema import PatchCourier
 from db.base import Session
 from db.schema import Courier as CourierSchema
 
@@ -29,16 +29,6 @@ async def patch_courier(courier_id: int, data: PatchCourier):
 
         if data.courier_type and data.regions and data.working_hours:
             query.regions = data.regions
-
-            if check_work_time(data.working_hours):
-                query.working_hours = data.working_hours
-            else:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Wrong work_time")
-
-            if check_courier_type(data.courier_type):
-                query.courier_type = data.courier_type
-            else:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Wrong courier_type")
             db.commit()
             return JSONResponse(query.to_dict(), status_code=status.HTTP_200_OK)
         else:

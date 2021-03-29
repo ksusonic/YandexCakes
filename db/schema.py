@@ -1,6 +1,6 @@
 from enum import Enum as PyEnum, unique
 
-from sqlalchemy import Column, Integer, Enum, ARRAY, String
+from sqlalchemy import Column, Integer, Enum, ARRAY, String, Float
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import MetaData
@@ -61,3 +61,20 @@ class Courier(Base):
             return weight_values['car']
         else:
             raise ValueError("No such courier type")
+
+
+class Order(Base):
+    __tablename__ = "order"
+
+    order_id = Column(Integer, primary_key=True)
+    weight = Column(Float, nullable=False)
+    region = Column(Integer, nullable=False)
+    delivery_hours = Column(ARRAY(String), nullable=False)
+
+    def to_dict(self) -> dict:
+        return {
+            'order_id': self.order_id,
+            'weight': self.weight,
+            'regions': self.regions,
+            'delivery_hours': self.delivery_hours
+        }

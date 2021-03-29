@@ -1,5 +1,7 @@
 from fastapi.exceptions import RequestValidationError
-from starlette.responses import PlainTextResponse
+from starlette import status
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 from uvicorn import run
 from fastapi import FastAPI
 
@@ -12,6 +14,11 @@ init_db()
 
 for router in ROUTERS:
     app.include_router(router)
+
+
+@app.exception_handler(RequestValidationError)
+def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(exc.errors(), status_code=status.HTTP_400_BAD_REQUEST)
 
 
 if __name__ == '__main__':
