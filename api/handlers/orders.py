@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter, status
 from sqlalchemy import and_
 from starlette.exceptions import HTTPException
@@ -6,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 from db.base import Session
 
-from api.schema import Order, Orders, Courier, CourierID, CourierType
+from api.schema import Order, Orders, Courier, CourierID, CourierType, check_courier_time_for_order
 from db.schema import Order as OrderSchema, Courier as CourierSchema
 
 router = APIRouter(prefix="/orders")
@@ -44,14 +46,29 @@ async def post_orders(order_list: Orders):
 @router.post('/assign')
 async def assign_post(courier_id: CourierID):
     response_ids = []
-    default_response = JSONResponse({'orders': response_ids})
+    default_response = JSONResponse(status_code=status.HTTP_400_BAD_REQUEST)
     db = Session()
     courier_from_db = db.query(CourierSchema).get(courier_id.courier_id)
     if not courier_from_db:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Courier not found")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Courier not found")
 
     query = db.query(OrderSchema).filter(
         and_(OrderSchema.region.in_(courier_from_db.regions)),
-        (OrderSchema.weight <= CourierType(courier_from_db.courier_type).weight()),
+        (OrderSchema.weight <= courier_from_db.courier_type.weight())
     ).all()
 
+    if not query:
+        return default_response
+
+    for order in query:
+        if check_courier_time_for_order(courier_from_db.working_hours, order.delivery_hours):
+            order.courier_id_assigned = courier_from_db.courier_id
+            response_ids.append(order.order_id)
+    if response_ids:
+        db.commit()
+        return JSONResponse(status_code=status.HTTP_200_OK, content={
+            'orders': [{'id': id_} for id_ in response_ids],
+            'assign_time': datetime.now().isoformat()[:-4] + 'Z'
+        })
+    else:
+        return default_response

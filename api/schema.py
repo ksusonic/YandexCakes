@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from typing import List, Optional
 
 from fastapi.exceptions import RequestValidationError
@@ -67,7 +68,13 @@ class CourierID(BaseModel):
     courier_id: int
 
 
-def check_courier_time_for_order(courier: Courier, order: Order) -> bool:
-    pass
+def check_courier_time_for_order(courier: list, order: list) -> bool:
+    for order_time in order:
+        o_start, o_end = order_time.split('-')
 
+        for courier_hours in courier:
+            c_start, c_end = courier_hours.split('-')
 
+            if c_start <= o_start <= c_end or o_start <= c_start <= o_end:
+                return True
+    return False

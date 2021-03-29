@@ -3,5 +3,5 @@ from .courier import router as courier
 from .orders import router as orders
 
 ROUTERS = (
-    couriers, courier, orders,  # TODO all routers
+    couriers, courier, orders
 )
