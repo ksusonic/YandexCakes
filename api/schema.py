@@ -44,3 +44,13 @@ class Order(BaseModel):
     weight: float
     region: int
     delivery_hours: List[str]
+
+    @validator('weight')
+    def weight_check(cls, weight):
+        if not 0.01 <= weight <= 50:
+            raise RequestValidationError
+        return weight
+
+
+class Orders(BaseModel):
+    data: List[Order]
